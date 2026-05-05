@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoku Tecnológico</title>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    #video-background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      gap: 35px;
+    }
+
+    .instagram {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid white;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .instagram img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Botones iguales y elegantes */
+    .btn {
+      font-size: 2.25rem;
+      font-weight: bold;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      padding: 20px 75px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 3px solid rgba(255, 255, 255, 0.95);
+      border-radius: 50px;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.04);
+      border-color: white;
+    }
+
+    /* ==================== OPTIMIZACIÓN PARA TELÉFONOS ==================== */
+    @media (max-width: 640px) {
+      .content {
+        gap: 28px;           /* menos espacio entre botones */
+        padding: 20px 15px;  /* más margen lateral pequeño */
+      }
+
+      .btn {
+        font-size: 1.65rem;      /* más pequeño en móviles */
+        letter-spacing: 3px;
+        padding: 16px 50px;      /* menos ancho */
+        border-radius: 50px;
+      }
+
+      .instagram {
+        width: 60px;
+        height: 60px;
+        top: 20px;
+        left: 20px;
+      }
+    }
+
+    /* Aún más pequeño en teléfonos muy pequeños (ej. iPhone SE, Android pequeños) */
+    @media (max-width: 480px) {
+      .btn {
+        font-size: 1.55rem;
+        padding: 15px 45px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <video id="video-background" autoplay loop muted playsinline>
+    <source src="fondo.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay"></div>
+
+  <div class="content">
+    <!-- Instagram -->
+    <a href="https://www.instagram.com/shoku_tecnologico?igsh=MWo4anlmaHUxeGFnNQ==" target="_blank" class="instagram">
+      <img src="ig.png" alt="Instagram Shoku">
+    </a>
+
+    <!-- Los 3 botones del mismo tamaño y totalmente visibles en celular -->
+    <a href="menu.html" class="btn">MENU</a>
+    <a href="https://won.cards/4nk" target="_blank" class="btn">MEMBRESIA</a>
+    <a href="https://maps.app.goo.gl/tYC4FADQPSR65c1r5" target="_blank" class="btn">
+      RECOMIENDANOS
+    </a>
+  </div>
+
+</body>
+</html>
