@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú - Shoku</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap');
+       
+        html, body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('FONDOT.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            color: #ffffff;
+            margin: 0;
+        }
+       
+        .logo-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .category-card {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 0.9s ease-out;
+            border-radius: 1.75rem;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+       
+        .category-card.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .category-card:hover {
+            transform: scale(1.03) translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+        }
+
+        .category-image-container {
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .category-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .category-card:hover .category-image-container img {
+            transform: scale(1.07);
+        }
+
+        .category-label {
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .category-label h2 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9),
+                         0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* CARRUSEL CORREGIDO */
+        .auto-gallery {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .auto-gallery .slides {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .auto-gallery .slides img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+
+        .auto-gallery .slides img.active { 
+            opacity: 1; 
+        }
+
+        .modal {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34, 1.1, 0.64, 1.1);
+            background-image: url('FONDOT.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .modal.show { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
+
+        .modal-content {
+            background: rgba(5, 5, 15, 0.88);
+            backdrop-filter: blur(14px);
+        }
+
+        body *, .modal h2, .modal h3, .logo-font {
+            color: #ffffff !important;
+        }
+
+        .modal h3 {
+            font-size: 1.65rem;
+            margin: 2.5rem 0 1rem;
+            text-align: center;
+            border-bottom: 2px solid rgba(255,255,255,0.25);
+            padding-bottom: 0.75rem;
+        }
+
+        /* ==================== RESPONSIVE MEJORADO ==================== */
+        @media (max-width: 768px) {
+            .category-card { padding: 8px; margin-bottom: 1rem; }
+            .category-image-container { border-radius: 1.25rem; }
+            .category-label h2 { font-size: 1.5rem; }
+            .auto-gallery { height: 190px; }
+            main { padding-top: 6rem; padding-bottom: 3rem; }
+        }
+
+        @media (max-width: 480px) {
+            .auto-gallery { height: 170px; }
+            .category-label h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/10">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2 text-white hover:text-orange-400 transition-colors">
+            <img src="FLECHA.png" alt="Regresar" class="w-9 h-9">
+            <span class="text-xs font-medium tracking-wider hidden sm:block">REGRESAR AL INICIO</span>
+        </a>
+        <img src="logo.png" alt="Logo" class="h-14 w-auto">
+        <div class="w-9"></div>
+    </div>
+</header>
+
+<main class="pt-24 pb-16 px-4 sm:px-6 max-w-5xl mx-auto">
+
+    <h1 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-12 tracking-wider">
+        MENÚ
+    </h1>
+
+    <div class="space-y-6 sm:space-y-7">
+
+        <!-- 1 ENTRADAS -->
+        <button data-modal="entradas" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="ENTRADAS.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">ENTRADAS</h2>
+                </div>
+            </div>
+        </button>
+
+        <!-- 2 ROLLOS -->
+        <button data-modal="rollos" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="ROLLOS.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">ROLLOS</h2>
+                </div>
+            </div>
+        </button>
+
+        <!-- 3 PLATILLOS -->
+        <button data-modal="platillos" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="TEPPAN.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">PLATILLOS</h2>
+                </div>
+            </div>
+        </button>
+
+        <!-- 4 BEBIDAS -->
+        <button data-modal="bebidas" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="BEBIDAS.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">BEBIDAS</h2>
+                </div>
+            </div>
+        </button>
+
+        <!-- 5 COMBOS -->
+        <button data-modal="combos" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="COMBOS.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">COMBOS</h2>
+                </div>
+            </div>
+        </button>
+
+        <!-- 6 MENÚ INFANTIL -->
+        <button data-modal="infantil" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="KIDS.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">MENÚ INFANTIL</h2>
+                </div>
+            </div>
+        </button>
+
+        <!-- 7 POSTRES -->
+        <button data-modal="postres" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="POSTRES.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">POSTRES</h2>
+                </div>
+            </div>
+        </button>
+
+        <!-- 8 ESPECIALES -->
+        <button data-modal="especiales" class="category-card w-full aspect-video relative">
+            <div class="category-image-container">
+                <img src="ESPECIALES.png" class="w-full h-full object-cover">
+            </div>
+            <div class="absolute inset-x-0 bottom-6">
+                <div class="category-label">
+                    <h2 class="logo-font">ESPECIALES</h2>
+                </div>
+            </div>
+        </button>
+
+    </div>
+</main>
+<!-- ==================== MODALES ==================== -->
+
+<!-- 1. ENTRADAS -->
+<!-- 1. ENTRADAS - ACTUALIZADO -->
+<div id="modal-entradas" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">ENTRADAS</h2>
+            
+            <!-- Carrusel (se mantiene igual) -->
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="entradas1.png" class="slide active" alt="">
+                    <img src="entradas3.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <h3 class="mt-6">SASHIMI</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>SASHIMI DE SALMÓN</span><br><span class="text-sm text-white/70">CORTE GRUESO</span></div>
+                    <span class="font-medium">$280</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>SASHIMI DE SALMÓN</span><br><span class="text-sm text-white/70">CORTE DELGADO</span></div>
+                    <span class="font-medium">$250</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>MIXTO DE ATÚN, SALMÓN, CAMARÓN Y PULPO</span><br><span class="text-sm text-white/70">CORTE DELGADO</span></div>
+                    <span class="font-medium">$280</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>SASHIMI DE ATÚN</span><br><span class="text-sm text-white/70">CORTE GRUESO</span></div>
+                    <span class="font-medium">$220</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>SASHIMI DE ATÚN</span><br><span class="text-sm text-white/70">CORTE DELGADO</span></div>
+                    <span class="font-medium">$200</span>
+                </div>
+            </div>
+
+            <h3 class="mt-8">TEMAKY / CONO</h3>
+            <p class="text-sm text-white/70 mb-4 leading-tight">Arroz, Philadelphia, Aguacate, Pepino y Marisco a elegir</p>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CANGREJO</span><span>$115</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CAMARÓN</span><span>$105</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ATÚN</span><span>$100</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PULPO</span><span>$110</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SALMÓN</span><span>$115</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ANGUILA</span><span>$120</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MIXTO (3 MARISCOS)</span><span>$135</span></div>
+            </div>
+
+            <h3 class="mt-8">ENSALADAS</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>SUNOMONO 130 G</span><br><span class="text-sm text-white/70">Pepino a la vinagreta</span></div>
+                    <span class="font-medium">$115</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PULPO 50 G</span><span>$130</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CAMARÓN 50 G</span><span>$125</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CANGREJO 50 G</span><span>$135</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SURIMI 50 G</span><span>$120</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SALMÓN 50 G</span><span>$140</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MIXTA 50 G</span><span>$150</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>EBI ESPECIAL 130 G</span><br><span class="text-sm text-white/70">Pepino, crujiente piel de salmón, camarones a la plancha sazonada con salsas</span></div>
+                    <span class="font-medium">$165</span>
+                </div>
+            </div>
+
+            <h3 class="mt-8">NIGIRIS</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SURIMI</span><span>$30</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CAMARÓN</span><span>$40</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PULPO</span><span>$45</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SALMÓN</span><span>$45</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CANGREJO</span><span>$40</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ATÚN</span><span>$40</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MASAGO</span><span>$50</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ANGUILA</span><span>$60</span></div>
+            </div>
+
+            <h3 class="mt-6 text-sm font-medium text-white/80">COMBOS</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>COMBO DE PIEZAS</span><br><span class="text-sm text-white/70">2 Camarón, 2 Salmón, 2 Cangrejo, 1 Atún, 1 Masago</span></div>
+                    <span class="font-medium">$250</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>COMBO MISOWI</span><br><span class="text-sm text-white/70">2 piezas de nigiris de cada uno + Sopa Miso al centro</span></div>
+                    <span class="font-medium">$280</span>
+                </div>
+            </div>
+
+            <h3 class="mt-8">YAKITORI / BROCHETAS</h3>
+            <p class="text-sm text-white/70 mb-4">Proteína a elección + Cebolla y Morrón bañados en salsa Teriyaki</p>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>POLLO</span><span>$105</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CARNE</span><span>$115</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CAMARÓN</span><span>$120</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SALMÓN</span><span>$130</span></div>
+            </div>
+
+            <h3 class="mt-8">SELECCIÓN SHOKU</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3 items-start">
+                    <div class="flex-1"><span>KUSHIAIGE</span><br><span class="text-sm text-white/70">Brochetas de queso empanizadas</span></div>
+                    <span class="font-medium">$100</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3 items-start">
+                    <div class="flex-1"><span>BAZUCAS</span><br><span class="text-sm text-white/70">Surimi relleno de queso Philadelphia empanizado</span></div>
+                    <span class="font-medium">$105</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3 items-start">
+                    <div class="flex-1"><span>SOPA MISO</span><br><span class="text-sm text-white/70">Pasta de soja, cebollín y queso tofu</span></div>
+                    <span class="font-medium">$90</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3 items-start">
+                    <div class="flex-1"><span>EDAMAMES</span><br><span class="text-sm text-white/70">Picantes o salados (200g)</span></div>
+                    <span class="font-medium">$95</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3 items-start">
+                    <div class="flex-1"><span>GYOSAS <span class="text-orange-400"></span></span><br><span class="text-sm text-white/70">Rellenas de carne en salsa a la naranja</span></div>
+                    <span class="font-medium">$90</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. ROLLOS - ACTUALIZADO CON LAS NUEVAS FOTOS -->
+<div id="modal-rollos" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">ROLLOS</h2>
+            
+            <!-- Carrusel (se mantiene igual) -->
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="rollof1.png" class="slide active" alt="">
+                    <img src="rollof2.png" class="slide" alt="">
+                    <img src="rollof3.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <h3 class="mt-6">ROLLOS FRÍOS</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>UNAGUI ESPECIAL</span><br><span class="text-sm text-white/70">Cangrejo, camarón, aguacate, pepino, por fuera Philadelphia con anguila</span></div>
+                    <span class="font-medium">$180</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>AGUIRRE</span><br><span class="text-sm text-white/70">Camarón, cangrejo, pulpo, pepino, por fuera cubierto de Philadelphia</span></div>
+                    <span class="font-medium">$180</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>ANAGO ESPECIAL</span><br><span class="text-sm text-white/70">Camarón empanizado, Philadelphia, aguacate, por fuera untado de tampico y corte de anguila</span></div>
+                    <span class="font-medium">$180</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>EBI UNAGUI</span><br><span class="text-sm text-white/70">Camarón, aguacate, por fuera Philadelphia, salmón y anguila</span></div>
+                    <span class="font-medium">$185</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MINACU</span><br><span class="text-sm text-white/70">Camarón empanizado, Philadelphia, aguacate, por fuera arroz frito</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>SAPORO</span><br><span class="text-sm text-white/70">Salmón, aguacate, pepino, por fuera Philadelphia y camarón</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>NORUEGA</span><br><span class="text-sm text-white/70">Cangrejo, aguacate, pepino por fuera Philadelphia y salmón</span></div>
+                    <span class="font-medium">$165</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>SHAKE NOKAWA</span><br><span class="text-sm text-white/70">Piel de salmón frita, Philadelphia, aguacate, pepino, por fuera ajonjolí y tampico</span></div>
+                    <span class="font-medium">$165</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>NATURAL ROLL</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, pepino, por fuera ajonjolí</span></div>
+                    <span class="font-medium">$110</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>NEVADA</span><br><span class="text-sm text-white/70">Salmón, pepino, aguacate, por fuera cubierto de Philadelphia</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MAIZITO ROLL</span><br><span class="text-sm text-white/70">Surimi, Philadelphia, pepino, por fuera ajonjolí con topping de tampico</span></div>
+                    <span class="font-medium">$165</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>TORO</span><br><span class="text-sm text-white/70">Atún, Philadelphia, pepino, por fuera masago</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>VILLANO</span><br><span class="text-sm text-white/70">Pollo, Philadelphia, aguacate, por fuera gratinado con queso Oaxaca y topping de tampico</span></div>
+                    <span class="font-medium">$180</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MAKI YAN <span class="text-orange-400">NUEVO</span></span><br><span class="text-sm text-white/70">Aguacate, salmón y atún, alga por fuera. (No contiene arroz)</span></div>
+                    <span class="font-medium">$190</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>PHILADELPHIA</span><br><span class="text-sm text-white/70">Salmón, Philadelphia, pepino, por fuera masago o ajonjolí</span></div>
+                    <span class="font-medium">$185</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>ALASKA</span><br><span class="text-sm text-white/70">Camarón, Philadelphia, aguacate, pepino, por fuera masago o ajonjolí</span></div>
+                    <span class="font-medium">$165</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>CALIFORNIA</span><br><span class="text-sm text-white/70">Camarón, aguacate, pepino, por fuera masago o ajonjolí</span></div>
+                    <span class="font-medium">$160</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>PASTEL</span><br><span class="text-sm text-white/70">Anguila, Philadelphia, por fuera masago con tampico y furikake</span></div>
+                    <span class="font-medium">$180</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>KANISHI</span><br><span class="text-sm text-white/70">Camarón, aguacate, untado por fuera topping de tampico y masago</span></div>
+                    <span class="font-medium">$165</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>Rollo Tampico</span><br><span class="text-sm text-white/70">Con topping de tampico (ensalada de surimi) por fuera ajonjolí</span></div>
+                    <span class="font-medium">$150</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>COSMOS ROLL</span><br><span class="text-sm text-white/70">Camarón, pulpo, cangrejo, Philadelphia, aguacate, por fuera ajonjolí</span></div>
+                    <span class="font-medium">$179</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>TOKIO</span><br><span class="text-sm text-white/70">Camarón empanizado, Philadelphia, aguacate, tampico, por fuera ajonjolí</span></div>
+                    <span class="font-medium">$169</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">ROLLOS GRANDES</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>EBI SAKAI</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, cangrejo, tampico, arroz, verdura, con alga por fuera, camarón capeado, acompañado de ½ ensalada ebi especial</span></div>
+                    <span class="font-medium">$260</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>FUTOMAKI</span><br><span class="text-sm text-white/70">Camarón, anguila, masago, Philadelphia, aguacate, pepino con alga por fuera</span></div>
+                    <span class="font-medium">$240</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>SHOKU</span><br><span class="text-sm text-white/70">Anguila, camarón, pulpo, Philadelphia, aguacate, pepino, por fuera masago</span></div>
+                    <span class="font-medium">$240</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>OSAKA</span><br><span class="text-sm text-white/70">Cangrejo, anguila, salmón, Philadelphia, aguacate, pepino, por fuera ajonjolí</span></div>
+                    <span class="font-medium">$240</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">ROLLOS CON FRUTA</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MANGUITO</span><br><span class="text-sm text-white/70">Camarón, Philadelphia, pepino, por fuera mango</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>BANANA</span><br><span class="text-sm text-white/70">Camarón, Philadelphia, plátano, empanizado con panko</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">EXTRAS</h3>
+            <div class="grid grid-cols-2 gap-x-8 gap-y-4 text-base sm:text-lg">
+                <div class="flex justify-between"><span>TAMPICO</span><span class="font-medium">$25</span></div>
+                <div class="flex justify-between"><span>EXTRA QUESO</span><span class="font-medium">$20</span></div>
+                <div class="flex justify-between"><span>EMPANIZADO</span><span class="font-medium">$25</span></div>
+                <div class="flex justify-between"><span>SALSA EXTRA</span><span class="font-medium">$12</span></div>
+                <div class="flex justify-between"><span>HAZLO JUMBO</span><span class="font-medium">$60</span></div>
+                <div class="flex justify-between"><span>CAMBIO DE ROLLO</span><span class="font-medium">$25</span></div>
+            </div>
+            <p class="text-xs text-white/60 mt-1">Tampico: 60 g de ensalada de surimi • Extra queso: Philadelphia o Oaxaca • Salsa extra: Chipotle y anguila 1 oz.</p>
+<!--yaki) -->
+            
+            <h3 class="mt-10">ROLLOS ESPECIALES</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>KABUKI</span><br><span class="text-sm text-white/70">Masago, cangrejo, pepino, por fuera salmón, anguila, camarón, Philadelphia y ajonjolí</span></div>
+                    <span class="font-medium">$195</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>ITALIA</span><br><span class="text-sm text-white/70">Camarón, cangrejo, anguila, masago, aguacate, por fuera salmón</span></div>
+                    <span class="font-medium">$195</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>FUJI ESPECIAL</span><br><span class="text-sm text-white/70">Camarón, salmón, Philadelphia, aguacate, pepino, por fuera untado tampico y masago, con topping de sirloin</span></div>
+                    <span class="font-medium">$195</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MOLOTOV</span><br><span class="text-sm text-white/70">Cangrejo, masago, salmón, por fuera Philadelphia cubierto con pepino</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>ARCOÍRIS</span><br><span class="text-sm text-white/70">Cangrejo, anguila, pepino, por fuera Philadelphia, masago, aguacate y ajonjolí</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>ABOKADO</span><br><span class="text-sm text-white/70">Anguila, camarón, Philadelphia, pepino, por fuera aguacate y ajonjolí</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">ROLLOS EMPANIZADOS</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>NIKI ROLL <span class="text-orange-400"></span></span><br><span class="text-sm text-white/70">Philadelphia, pepino, masago, surimi</span></div>
+                    <span class="font-medium">$180</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>TIERRA</span><br><span class="text-sm text-white/70">Sirloin, aguacate y Philadelphia</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>SANDINO</span><br><span class="text-sm text-white/70">Pollo, Philadelphia, aguacate</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MAÍZ ROLL</span><br><span class="text-sm text-white/70">Surimi, Philadelphia, aguacate con topping de tampico</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>KANISASHI</span><br><span class="text-sm text-white/70">Tampico (ensalada de surimi) por fuera Philadelphia, surimi, tampico y furikake</span></div>
+                    <span class="font-medium">$169</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>CHIP REAL</span><br><span class="text-sm text-white/70">Camarón empanizado, Philadelphia, aguacate, por fuera arroz frito con tampico</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>OKONO</span><br><span class="text-sm text-white/70">Camarón, Philadelphia, aguacate y topping de tampico</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>OKUSAY</span><br><span class="text-sm text-white/70">Cangrejo, anguila, Philadelphia, aguacate, por fuera salmón</span></div>
+                    <span class="font-medium">$195</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">ROLLOS GRATINADOS</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MAR Y TIERRA</span><br><span class="text-sm text-white/70">Camarón, sirloin, Philadelphia, aguacate, con topping de tampico</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>VILLA</span><br><span class="text-sm text-white/70">Pollo, Philadelphia, aguacate, gratinado con queso Oaxaca y topping de tampico</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>GEISHA</span><br><span class="text-sm text-white/70">Camarón, Philadelphia, aguacate, tampico, gratinado con queso Oaxaca</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">ROLLOS CAPEADOS</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>YUMI</span><br><span class="text-sm text-white/70">Arroz frito, Philadelphia, aguacate, surimi con el alga por fuera y camarón</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MAGURO</span><br><span class="text-sm text-white/70">Atún, Philadelphia, pepino, con topping de tampico</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>CHIP</span><br><span class="text-sm text-white/70">Camarón empanizado, Philadelphia, aguacate, con topping de tampico</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 3. PLATILLOS - ACTUALIZADO CON LA NUEVA IMAGEN (todo el contenido) -->
+<div id="modal-platillos" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">PLATILLOS</h2>
+            
+            <!-- Carrusel (se mantiene igual) -->
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="plati1.png" class="slide active" alt="">
+                    <img src="plati2.png" class="slide" alt="">
+                    <img src="plati3.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <h3 class="mt-6">NUEVOS PLATILLOS</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>COSTISHOKU 300 G</span><br><span class="text-sm text-white/70">Costillar de cerdo acompañado de papas a la francesa. Salsa a elegir: naranja, tamarindo o BBQ.</span></div>
+                    <span class="font-medium">$245</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>SALMÓN NATURAL 300 G</span><br><span class="text-sm text-white/70">Salmón a la plancha acompañado de gohan (arroz al vapor)</span></div>
+                    <span class="font-medium">$250</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">YAKIMESHI</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>YAKIMESHI 300 G</span><br><span class="text-sm text-white/70">Arroz frito con verduras, zanahoria, calabaza y cebolla</span></div>
+                    <span class="font-medium">$90</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>POLLO</span><span>$105</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SIRLOIN</span><span>$120</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CAMARÓN</span><span>$135</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PULPO</span><span>$145</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MIXTO</span><br><span class="text-sm text-white/70">Pollo, camarón y sirloin</span></div>
+                    <span class="font-medium">$150</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>YAKIMESHI SHOKU</span><br><span class="text-sm text-white/70">Arroz frito, sirloin, camarón, champiñones, tampico, aguacate y cebollín</span></div>
+                    <span class="font-medium">$150</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>YAKIMESHI ESPECIAL <span class="text-orange-400"></span></span><br><span class="text-sm text-white/70">Arroz frito, sirloin, pulpo, camarón, tampico, queso crema, aguacate, cebollín y furikake</span></div>
+                    <span class="font-medium">$220</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">TEPPAN YAKI</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>TEPPAN YAKI 430 G</span><br><span class="text-sm text-white/70">Calabaza, morrón, cebolla, brócoli, coliflor y germen de soya</span></div>
+                    <span class="font-medium">$125</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SALMÓN</span><span>$250</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>POLLO</span><span>$170</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SIRLOIN</span><span>$175</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CAMARÓN</span><span>$200</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MIXTO</span><br><span class="text-sm text-white/70">Pollo, camarón y sirloin</span></div>
+                    <span class="font-medium">$230</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>TEPPAN YAKI DE PULPO</span><span>$245</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MIXTO DE MARISCOS</span><br><span class="text-sm text-white/70">Salmón, camarón y pulpo</span></div>
+                    <span class="font-medium">$270</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">PLATILLOS EMPANIZADOS</h3>
+            <p class="text-sm text-white/70 mb-4 leading-tight">Con porción de yakimeshi y ensalada de pepino</p>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>ZAKANA</span><br><span class="text-sm text-white/70">Pescado empanizado 350 g</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>TEMPURA MIXTO</span><br><span class="text-sm text-white/70">Camarón, morrón, calabaza, zanahoria, cebolla, brócoli y coliflor (platillo capeado no incluye ensalada)</span></div>
+                    <span class="font-medium">$250</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>EBI FRAY</span><br><span class="text-sm text-white/70">5 camarones empanizados 140 g • Queso Philadelphia por $20+</span></div>
+                    <span class="font-medium">$200</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>PLATILLO COMBINADO</span><br><span class="text-sm text-white/70">Corte de salmón empanizado con queso, 2 piezas de camarón empanizado con queso</span></div>
+                    <span class="font-medium">$235</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>TORI FRAY</span><br><span class="text-sm text-white/70">Fajitas de pollo empanizadas 120 g</span></div>
+                    <span class="font-medium">$180</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>SALMÓN CON QUESO EMPANIZADO</span><br><span class="text-sm text-white/70">140 g</span></div>
+                    <span class="font-medium">$240</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">SOPAS, ARROZ Y RAMÉN</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>RAMÉN CLÁSICO</span><br><span class="text-sm text-white/70">435 g pollo, costilla, camarón y pasta • Hazlo spicy por solo $20+</span></div>
+                    <span class="font-medium">$150</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>GOHAN</span><span class="font-medium">$60</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>GOHAN SAKE</span><br><span class="text-sm text-white/70">435 g arroz al vapor con salmón, surimi, masago y tampico</span></div>
+                    <span class="font-medium">$160</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>KIMUSHI NAVE</span><br><span class="text-sm text-white/70">Camarón, pescado, pollo, jaraosamen de soya, germen de soya, queso de soya, brócoli, coliflor, zanahoria y calabaza</span></div>
+                    <span class="font-medium">$150</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>YAKIUDON</span><br><span class="text-sm text-white/70">Espaguetti (pasta japonesa), pollo, camarón, cebolla, zanahoria, calabaza y germen de soya</span></div>
+                    <span class="font-medium">$200</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">SUSHI BALLS</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <!-- Izquierda -->
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>CLÁSICA</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, tampico, camarón</span></div>
+                    <span class="font-medium">$155</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>GOURMET</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, tampico, camarón, gratinada con queso Oaxaca y con topping de cebolla frita y sirloin</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>MIXTA</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, pollo, sirloin, cubierta de arroz frito, con topping de tampico, camarones y cebollín</span></div>
+                    <span class="font-medium">$185</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>LAGUNA</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, salmón frito, gratinada con queso Oaxaca, con topping de camarón y aderezo chipotle</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+
+                <!-- Derecha -->
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>REGIA</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, sirloin, con topping de tampico, champiñones y aderezo de chipotle</span></div>
+                    <span class="font-medium">$169</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>PASTORCITA</span><br><span class="text-sm text-white/70">Por dentro: aguacate, pastor, por fuera gratinada, con topping de pastor y cebolla frita</span></div>
+                    <span class="font-medium">$169</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>CHICKEN</span><br><span class="text-sm text-white/70">Philadelphia, aguacate, pollo y gratinada con queso Oaxaca y topping de tocino</span></div>
+                    <span class="font-medium">$169</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4"><span>PEKIN</span><br><span class="text-sm text-white/70">Por dentro sirloin con cebolla frita, queso Oaxaca, aguacate, por fuera con topping de pollo a la naranja</span></div>
+                    <span class="font-medium">$179</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. BEBIDAS - ACTUALIZADO CON LAS NUEVAS IMÁGENES -->
+<div id="modal-bebidas" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">BEBIDAS</h2>
+            
+            <!-- Carrusel (se mantiene igual) -->
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="bebi1.png" class="slide active" alt="">
+                    <img src="bebi2.png" class="slide" alt="">
+                    <img src="bebi3.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <h3 class="mt-6">BEBIDAS SIN ALCOHOL</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>AGUA EMBOTELLADA 500 ML</span><span>$35</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>REFRESCO 355 ML</span><span>$40</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>FUZE TEA 600 ML</span><span>$45</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ARIZONA 355 ML</span><span>$40</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>AGUA MINERAL 355 ML</span><span>$40</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>LIMONADA 700 ML</span><br><span class="text-sm text-white/70">Natural o mineral / fruta natural</span></div>
+                    <span>$45</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>LIMONADA CURAZAO 700 ML</span><br><span class="text-sm text-white/70">Con jarabe azul</span></div>
+                    <span>$45</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>JARRA DE LIMONADA 1.3 L</span><br><span class="text-sm text-white/70">Clásica</span></div>
+                    <span>$135</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>JARRA DE LIMONADA 1.3 L</span><br><span class="text-sm text-white/70">Frutos rojos, fresa, pepino, piña, mango</span></div>
+                    <span>$150</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>LIMONADA DE SABOR 700 ML</span><br><span class="text-sm text-white/70">Clásica • Frutos rojos • Fresa • Pepino • Mango • Coco</span></div>
+                    <span>$50</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>AGUA DE PIÑA 700 ML</span><span>$50</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>NARANJADA 700 ML</span><span>$50</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PIÑADA 470 ML</span><span>$70</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>FRESADA 470 ML</span><span>$70</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>RUSA 470 ML</span><span>$55</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SANGRÍA 470 ML</span><span>$65</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CUCUMBER 500 ML</span><span>$55</span></div>
+            </div>
+
+            <h3 class="mt-10">TES</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>OSHA 700 ML</span><br><span class="text-sm text-white/70">Té verde frío o caliente</span></div>
+                    <span>$69</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>JAZMÍN 700 ML</span><br><span class="text-sm text-white/70">Frío o caliente</span></div>
+                    <span>$69</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>DETOX 700 ML</span><br><span class="text-sm text-white/70">Té verde con limón frío o caliente</span></div>
+                    <span>$69</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>JARRA DE TÉ 1.3 L</span><br><span class="text-sm text-white/70">Jazmín, Detox, Osha, Cebada, Oolong</span></div>
+                    <span>$175</span>
+                </div>
+            </div>
+
+            <h3 class="mt-10">CERVEZA</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>VICTORIA 355 ML</span><span>$45</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CORONA 355 ML</span><span>$45</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MODELO NEGRA 355 ML</span><span>$45</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MODELO ESPECIAL 355 ML</span><span>$45</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>STELLA ARTOIS 355 ML</span><span>$65</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ULTRA MICHELOB 355 ML</span><span>$60</span></div>
+            </div>
+
+            <h3 class="mt-10">PREPARADOS</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CLAMATO</span><span>$35</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CLAMATO 1 L</span><span>$55</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MICHELADA</span><span>$25</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CHELADO</span><span>$20</span></div>
+            </div>
+
+            <h3 class="mt-10">MIXOLOGÍA</h3>
+            <div class="space-y-5 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>APEROL SPRITZ <span class="text-orange-400">NUEVO</span></span><br><span class="text-sm text-white/70">400 ml / Aperol</span></div>
+                    <span>$90</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PALOMA 400 ML / TEQUILA</span><span>$90</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>SEX ON THE BEACH 400 ML / VODKA</span><span>$90</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CONGA 400 ML / VODKA</span><span>$90</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>LIMONADA ELÉCTRICA 400 ML / VODKA</span><span>$90</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>FRESA COLADA 400 ML / RON</span><span>$90</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PIÑA COLADA 400 ML / RON</span><span>$90</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CARAJILLO 400 ML / LICOR 43, CAFÉ</span><span>$90</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>BAILEYS EN LAS ROCAS 2 OZ.</span><span>$90</span></div>
+
+                <!-- MEZCALITOS -->
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>MEZCALITOS 400 ML</span><br><span class="text-sm text-white/70">Jamaica / Serrano / Fresa / Tamarindo / Frutos rojos</span></div>
+                    <span>$90</span>
+                </div>
+
+                <!-- MOJITOS -->
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>MOJITOS 400 ML</span><br><span class="text-sm text-white/70">Clásico / Pepino / Fresa / Frutos rojos</span></div>
+                    <span>$120</span>
+                </div>
+
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>GIN TÓNIC 460 ML</span><br><span class="text-sm text-white/70">Frutos rojos / Fresa / Mango</span></div>
+                    <span>$100</span>
+                </div>
+
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>CLERICOT 460 ML</span><br><span class="text-sm text-white/70">Clásico / Rosado</span></div>
+                    <span>$115</span>
+                </div>
+
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>DAIKIRI 460 ML</span><br><span class="text-sm text-white/70">Clásico / Fresa</span></div>
+                    <span>$120</span>
+                </div>
+
+                <!-- WHISKY -->
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ETIQUETA ROJA 2 OZ.</span><span>$75</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>ETIQUETA NEGRA 2 OZ.</span><span>$95</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>BUCHANAN'S 2 OZ.</span><span>$95</span></div>
+            </div>
+
+            <h3 class="mt-10">RON • BRANDY • TEQUILA</h3>
+            <div class="grid grid-cols-2 gap-x-8 gap-y-4 text-base sm:text-lg">
+                <!-- RON -->
+                <div><span>BACARDÍ 2 OZ.</span><span class="float-right">$70</span></div>
+                <div><span>MATUSALEM 2 OZ.</span><span class="float-right">$60</span></div>
+                
+                <!-- BRANDY -->
+                <div><span>TORRES 10 2 OZ.</span><span class="float-right">$70</span></div>
+                <div><span>TORRES 15 2 OZ.</span><span class="float-right">$75</span></div>
+                
+                <!-- TEQUILA -->
+                <div><span>JOSE CUERVO TRADICIONAL 2 OZ.</span><span class="float-right">$80</span></div>
+                <div><span>DON JULIO 70 2 OZ.</span><span class="float-right">$125</span></div>
+                <div><span>MAESTRO DOBEL 2 OZ.</span><span class="float-right">$110</span></div>
+            </div>
+
+            <h3 class="mt-8">TEQUILA 30-30</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>CRISTALINO 2 OZ.</span><span>$70</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>REPOSADO 2 OZ.</span><span>$70</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>BLANCO 2 OZ.</span><span>$70</span></div>
+            </div>
+
+            <h3 class="mt-10">COCTELES ESPECIALES</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MARGARITA 400 ML</span><span>$100</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>VAMPIRO 400 ML</span><span>$100</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>BLOODY MARY 400 ML</span><span>$100</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>NOBLE PUNCH 400 ML</span><span>$100</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>MINT TEQUILA 400 ML</span><span>$100</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. COMBOS - ACTUALIZADO CON LA NUEVA IMAGEN (todo el contenido exacto) -->
+<div id="modal-combos" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">COMBOS</h2>
+            
+            <!-- Carrusel (se mantiene igual) -->
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="comb1.png" class="slide active" alt="">
+                    <img src="comb2.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <p class="text-xs text-white/60 text-center mb-8 italic">
+                PROMOCIONES DE VIERNES A DOMINGO<br>
+                NO VÁLIDA EN DÍAS FESTIVOS NI ACUMULABLE CON OTRAS PROMOCIONES.
+            </p>
+
+            <h3 class="mt-4">COMBO INDIVIDUAL</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4">
+                        <span>½ YAKIMESHI DE POLLO O SIRLOIN O ½ SUNOMONO DE SURIMI</span><br>
+                        <span class="text-sm text-white/70">+ REFRESCO O LIMONADA 355 ML</span><br>
+                        <span class="text-sm text-white/70">+ 1 ROLLO A ELEGIR</span>
+                    </div>
+                    <span class="font-medium">$200</span>
+                </div>
+            </div>
+            <p class="text-sm text-white/70 pl-2 mb-6">
+                <strong>Empanizado:</strong> Maíz Roll, Sandino<br>
+                <strong>Fríos:</strong> Alaska, California
+            </p>
+
+            <h3 class="mt-10">COMBO YAKI</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4">
+                        <span>½ YAKIMESHI DE POLLO O SIRLOIN O ½ SUNOMONO DE SURIMI</span><br>
+                        <span class="text-sm text-white/70">+ 1 BAZUCA</span><br>
+                        <span class="text-sm text-white/70">+ 1 ROLLO A ELEGIR</span>
+                    </div>
+                    <span class="font-medium">$210</span>
+                </div>
+            </div>
+            <p class="text-sm text-white/70 pl-2 mb-6">
+                <strong>Empanizado:</strong> Mar y Tierra, Villa, Chip Real, Okono<br>
+                <strong>Fríos:</strong> Anago Especial, Saporo
+            </p>
+
+            <h3 class="mt-10">COMBO ORIENTAL</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4">
+                        <span>POLLO A LA NARANJA (PORCIÓN)</span><br>
+                        <span class="text-sm text-white/70">+ YAKIMESHI 150 G (ARROZ Y VERDURA)</span><br>
+                        <span class="text-sm text-white/70">+ 1 ROLLO A ELEGIR</span>
+                    </div>
+                    <span class="font-medium">$220</span>
+                </div>
+            </div>
+            <p class="text-sm text-white/70 pl-2 mb-6">
+                <strong>Empanizado:</strong> Okono, Tierra, Sandino, Mar y Tierra, Maíz Roll<br>
+                <strong>Fríos:</strong> Tokio, Alaska, Philadelphia, Kanishi
+            </p>
+
+            <h3 class="mt-10">COMBO SHOKU</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4">
+                        <span>1 ARROZ POLLO</span><br>
+                        <span class="text-sm text-white/70">+ 1 FILETE DE PESCADO O ½ ENSALADA DE SURIMI</span><br>
+                        <span class="text-sm text-white/70">+ 1 ROLLO A ELEGIR</span>
+                        <span class="text-xs text-orange-400 block mt-2">HAZLO MIXTO POR $35+</span>
+                    </div>
+                    <span class="font-medium">$235</span>
+                </div>
+            </div>
+            <p class="text-sm text-white/70 pl-2 mb-6">
+                <strong>Empanizado:</strong> Sandino, Maíz Roll<br>
+                <strong>Fríos:</strong> Tokio, Alaska, Philadelphia
+            </p>
+
+            <h3 class="mt-10">COMBO TEC</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4">
+                        <span>200 G DE BONELESS O ALITAS</span><br>
+                        <span class="text-sm text-white/70">con salsa Buffalo, Mango Habanero o BBQ</span><br>
+                        <span class="text-sm text-white/70">+ 1 ROLLO A ELEGIR</span>
+                    </div>
+                    <span class="font-medium">$205</span>
+                </div>
+            </div>
+            <p class="text-sm text-white/70 pl-2 mb-6">
+                <strong>Empanizado:</strong> Okono, Tierra, Sandino<br>
+                <strong>Fríos:</strong> Alaska, Villano, Minacu, California
+            </p>
+
+            <h3 class="mt-10">PA' QUE COMPARTAS</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div class="flex-1 pr-4">
+                        <span>1 ORDEN DE BAZUCAS</span><br>
+                        <span class="text-sm text-white/70">+ 1 ARROZ MIXTO</span><br>
+                        <span class="text-sm text-white/70">+ 1 ENSALADA DE SURIMI</span><br>
+                        <span class="text-sm text-white/70">+ 1 JARRA DE LIMONADA O 3 REFRESCOS 355 ML</span><br>
+                        <span class="text-sm text-white/70">+ 2 ROLLOS A ELEGIR</span>
+                    </div>
+                    <span class="font-medium">$530</span>
+                </div>
+            </div>
+            <p class="text-sm text-white/70 pl-2">
+                <strong>Empanizado:</strong> Okono, Tierra, Sandino, Kanisashi<br>
+                <strong>Fríos:</strong> Tokio, Alaska, Minacu
+            </p>
+        </div>
+    </div>
+</div>
+<!-- 6. MENÚ INFANTIL - ACTUALIZADO -->
+<div id="modal-infantil" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">MENÚ INFANTIL</h2>
+            
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="kids1.png" class="slide active" alt="">
+                    <img src="kids2.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <div class="text-center mb-8">
+                <p class="text-2xl font-bold">$95 C/U</p>
+                <p class="text-lg text-white/80">ACOMPAÑADOS DE PAPAS A LA FRANCESA</p>
+            </div>
+
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3 text-xl">
+                    <span>FILETE DE PESCADO</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3 text-xl">
+                    <span>NUGGETS DE POLLO</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3 text-xl">
+                    <span>FAJITAS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 7. POSTRES - ACTUALIZADO -->
+<div id="modal-postres" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">POSTRES</h2>
+            
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="postres1.png" class="slide active" alt="">
+                    <img src="postres2.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <div class="space-y-6 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-4">
+                    <div class="flex-1 pr-6">
+                        <span class="font-semibold text-lg">TEMPURA HELADO</span><br>
+                        <span class="text-sm text-white/70">Pan relleno de helado de vainilla, capeado cubierto con mermelada de fresa, chocolate o cajeta</span>
+                    </div>
+                    <span class="font-medium text-xl">$85</span>
+                </div>
+
+                <div class="flex justify-between border-b border-white/20 pb-4">
+                    <div class="flex-1 pr-6">
+                        <span class="font-semibold text-lg">BANANA YAKI</span><br>
+                        <span class="text-sm text-white/70">Plátano capeado con 1 bola de helado de vainilla con mermelada de fresa, chocolate o cajeta</span>
+                    </div>
+                    <span class="font-medium text-xl">$85</span>
+                </div>
+
+                <div class="flex justify-between border-b border-white/20 pb-4">
+                    <div class="flex-1 pr-6">
+                        <span class="font-semibold text-lg">HELADO AL TINTO</span><br>
+                        <span class="text-sm text-white/70">Bola de helado gourmet, servido en copa con un toque de vino tinto</span>
+                    </div>
+                    <span class="font-medium text-xl">$120</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 8. ESPECIALES - ACTUALIZADO CON LAS NUEVAS FOTOS -->
+<div id="modal-especiales" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
+    <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
+        <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
+        
+        <div class="p-6 sm:p-12">
+            <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">ESPECIALES</h2>
+           
+            <div class="auto-gallery mx-auto mb-8">
+                <div class="slides">
+                    <img src="especiales1.png" class="slide active" alt="">
+                    <img src="especiales2.png" class="slide" alt="">
+                </div>
+            </div>
+
+            <!-- SPECIAL BOX -->
+            <h3 class="mt-6">SPECIAL BOX</h3>
+            <p class="text-sm text-white/70 mb-4">IDEAL PARA COMPARTIR ENTRE 2 PERSONAS</p>
+            <div class="flex justify-between border-b border-white/20 pb-3">
+                <span class="font-medium">$400</span>
+            </div>
+            <div class="grid grid-cols-3 gap-4 text-sm mt-4">
+                <div>• BONELESS 150 G</div>
+                <div>• PAPAS A LA FRANCESA 100 G</div>
+                <div>• 2 ROLLOS A ELEGIR</div>
+            </div>
+
+            <!-- THE SHOKU BOX -->
+            <h3 class="mt-10">THE SHOKU BOX</h3>
+            <p class="text-sm text-white/70 mb-4">IDEAL PARA COMPARTIR ENTRE 3-5 PERSONAS</p>
+            <div class="flex justify-between border-b border-white/20 pb-3">
+                <span class="font-medium">$630</span>
+            </div>
+            <div class="grid grid-cols-3 gap-4 text-sm mt-4">
+                <div>• BONELESS 200 G<br>• ALITAS 200 G<br>• EDAMAMES 100 G</div>
+                <div>• PAPAS CRISSCUT 200 G<br>• PAPAS GAJO 200 G<br>• AROS DE CEBOLLA 200 G</div>
+                <div>• 3 ROLLOS A ELEGIR</div>
+            </div>
+
+            <!-- ELIGE TU ROLLO -->
+            <h3 class="mt-10">ELIGE TU ROLLO</h3>
+            <p class="text-sm text-white/70 mb-6">Selecciona tus rollos favoritos para los boxes</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+                <!-- Rollos Fríos -->
+                <div>
+                    <h4 class="text-orange-400 font-semibold mb-3 border-b border-white/20 pb-2">ROLLOS FRÍOS</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <strong>PHILADELPHIA</strong><br>
+                            <span class="text-white/70 text-xs">Salmón, Philadelphia, Pepino, por fuera masago o ajonjolí</span>
+                        </div>
+                        <div>
+                            <strong>ALASKA</strong><br>
+                            <span class="text-white/70 text-xs">Camarón, Philadelphia, Aguacate, Pepino, por fuera masago o ajonjolí</span>
+                        </div>
+                        <div>
+                            <strong>KANISHI</strong><br>
+                            <span class="text-white/70 text-xs">Camarón, Aguacate, untado por fuera con topping de Támpico y masago o ajonjolí</span>
+                        </div>
+                        <div>
+                            <strong>TOKIO</strong><br>
+                            <span class="text-white/70 text-xs">Camarón empanizado, Philadelphia, Aguacate, Támpico, por fuera ajonjolí</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empanizados -->
+                <div>
+                    <h4 class="text-orange-400 font-semibold mb-3 border-b border-white/20 pb-2">EMPANIZADOS</h4>
+                    <div class="space-y-4">
+                        <div>
+                            <strong>TIERRA</strong><br>
+                            <span class="text-white/70 text-xs">Sirloin, Aguacate y Philadelphia</span>
+                        </div>
+                        <div>
+                            <strong>SANDINO</strong><br>
+                            <span class="text-white/70 text-xs">Pollo, Philadelphia, Aguacate</span>
+                        </div>
+                        <div>
+                            <strong>MAÍZ ROLL</strong><br>
+                            <span class="text-white/70 text-xs">Surimi, Philadelphia, Aguacate con topping de Támpico</span>
+                        </div>
+                        <div>
+                            <strong>OKONO</strong><br>
+                            <span class="text-white/70 text-xs">Camarón, Philadelphia, Aguacate y topping de Támpico</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PLATILLOS TERIYAKI -->
+            <h3 class="mt-12">PLATILLOS TERIYAKI</h3>
+            <p class="text-sm text-white/70 mb-4">Con porción de Yakimeshi, Brócoli y Coliflor</p>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>POLLO 520 G</span><br><span class="text-sm text-white/70">En salsa agridulce</span></div>
+                    <span class="font-medium">$189</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>CARNE 520 G</span><br><span class="text-sm text-white/70">Sirloin en salsa agridulce</span></div>
+                    <span class="font-medium">$195</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>MIXTO 520 G</span><br><span class="text-sm text-white/70">Pollo, Sirloin y Camarón en salsa agridulce</span></div>
+                    <span class="font-medium">$210</span>
+                </div>
+            </div>
+
+            <!-- PLATILLOS ESPECIALES -->
+            <h3 class="mt-10">PLATILLOS ESPECIALES</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>BONELESS</span><br><span class="text-sm text-white/70">Con papas a la francesa por $25+ • Salsa Buffalo, Mango Habanero o BBQ</span></div>
+                    <span class="font-medium">$145</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>ALITAS</span><br><span class="text-sm text-white/70">Con papas a la francesa por $25+ • Salsa Buffalo, Mango Habanero o BBQ</span></div>
+                    <span class="font-medium">$155</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>POLLO A LA NARANJA 300 G</span></div>
+                    <span class="font-medium">$95</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>POLLO LIGHT 200 G</span><br><span class="text-sm text-white/70">Acompañado de arroz al vapor, brócoli y coliflor</span></div>
+                    <span class="font-medium">$145</span>
+                </div>
+                <div class="flex justify-between border-b border-white/20 pb-3">
+                    <div><span>DOMBURI DE POLLO 150 G <span class="text-orange-400">NUEVO</span></span><br><span class="text-sm text-white/70">Arroz al vapor, trocitos de pollo en salsa agridulce, con cortes de alga marina</span></div>
+                    <span class="font-medium">$175</span>
+                </div>
+            </div>
+
+            <!-- ACOMPAÑAMIENTOS -->
+            <h3 class="mt-10">ACOMPAÑAMIENTOS</h3>
+            <div class="space-y-4 text-base sm:text-lg">
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PAPAS GAJO</span><span>$65</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PAPAS CRISSCUT</span><span>$70</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>PAPAS A LA FRANCESA</span><span>$60</span></div>
+                <div class="flex justify-between border-b border-white/20 pb-3"><span>AROS DE CEBOLLA</span><span>$75</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cards = document.querySelectorAll('.category-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('appear');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.25 });
+
+    cards.forEach(card => observer.observe(card));
+
+    document.querySelectorAll('[data-modal]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const modal = document.getElementById(`modal-${btn.dataset.modal}`);
+            if (modal) {
+                modal.classList.remove('hidden', 'pointer-events-none');
+                setTimeout(() => modal.classList.add('show'), 30);
+            }
+        });
+    });
+
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => closeModal(btn.closest('.modal')));
+    });
+
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', e => {
+            if (e.target === modal) closeModal(modal);
+        });
+    });
+
+    function closeModal(modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.classList.add('hidden', 'pointer-events-none'), 400);
+    }
+
+    // Carrusel cada 3 segundos
+    function initCarousels() {
+        document.querySelectorAll('.auto-gallery').forEach(gallery => {
+            const slides = gallery.querySelectorAll('img');
+            if (slides.length < 2) return;
+            let current = 0;
+            function next() {
+                slides[current].classList.remove('active');
+                current = (current + 1) % slides.length;
+                slides[current].classList.add('active');
+            }
+            setInterval(next, 3000);
+        });
+    }
+
+    window.addEventListener('load', initCarousels);
+</script>
+
+</body>
+</html>
