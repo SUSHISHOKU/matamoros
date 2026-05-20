@@ -1187,14 +1187,14 @@
         </div>
     </div>
 </div>
-<!-- 8. ESPECIALES - ACTUALIZADO CON LAS NUEVAS FOTOS -->
+<!-- 8. ESPECIALES -->
 <div id="modal-especiales" class="modal fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 pointer-events-none">
     <div class="modal-content rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto relative border border-white/15 shadow-2xl">
         <button class="close-modal absolute top-5 right-5 text-5xl text-white/80 hover:text-white z-20 transition">×</button>
-        
+       
         <div class="p-6 sm:p-12">
             <h2 class="logo-font text-4xl sm:text-5xl font-bold text-center mb-8">ESPECIALES</h2>
-           
+          
             <div class="auto-gallery mx-auto mb-8">
                 <div class="slides">
                     <img src="especiales1.png" class="slide active" alt="">
@@ -1229,7 +1229,7 @@
             <!-- ELIGE TU ROLLO -->
             <h3 class="mt-10">ELIGE TU ROLLO</h3>
             <p class="text-sm text-white/70 mb-6">Selecciona tus rollos favoritos para los boxes</p>
-            
+           
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
                 <!-- Rollos Fríos -->
                 <div>
@@ -1253,7 +1253,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Empanizados -->
                 <div>
                     <h4 class="text-orange-400 font-semibold mb-3 border-b border-white/20 pb-2">EMPANIZADOS</h4>
@@ -1329,10 +1328,73 @@
                 <div class="flex justify-between border-b border-white/20 pb-3"><span>PAPAS A LA FRANCESA</span><span>$60</span></div>
                 <div class="flex justify-between border-b border-white/20 pb-3"><span>AROS DE CEBOLLA</span><span>$75</span></div>
             </div>
+
+            <!-- ==================== NUEVA SECCIÓN: BOWLS ==================== -->
+            <h3 class="mt-12 text-3xl font-bold text-center logo-font tracking-wider">BOWLS <span class="text-orange-400 text-2xl">NUEVO</span></h3>
+            <p class="text-center text-white/70 mt-2 mb-8">TODO LO BUENO, CABE EN UN BOWL. ARMA LA COMBINACIÓN QUE MÁS TE GUSTE.</p>
+
+            <!-- Bowl Clásico y Fit -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <!-- Bowl Clásico -->
+                <div class="border border-white/20 rounded-2xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="text-2xl font-bold">BOWL CLÁSICO</h4>
+                        <span class="text-2xl font-bold text-orange-400">$150</span>
+                    </div>
+                    <div class="text-sm space-y-1 text-white/80">
+                        <div><strong>2 PROTEÍNAS</strong></div>
+                        <div><strong>2 COMPLEMENTOS</strong></div>
+                        <div class="pt-2"><strong>BASE DE ARROZ AL VAPOR 150G</strong></div>
+                    </div>
+                </div>
+
+                <!-- Bowl Fit -->
+                <div class="border border-white/20 rounded-2xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="text-2xl font-bold">BOWL FIT</h4>
+                        <span class="text-2xl font-bold text-orange-400">$180</span>
+                    </div>
+                    <div class="text-sm space-y-1 text-white/80">
+                        <div><strong>3 PROTEÍNAS</strong></div>
+                        <div><strong>3 COMPLEMENTOS</strong></div>
+                        <div class="pt-2"><strong>BASE DE ARROZ AL VAPOR 150G</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proteínas -->
+            <div class="mb-10">
+                <h4 class="text-orange-400 font-semibold mb-4 border-b border-white/20 pb-2">PROTEÍNAS</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-2 text-sm">
+                    <div>• CAMARÓN</div>
+                    <div>• SALMÓN</div>
+                    <div>• POLLO</div>
+                    <div>• ATÚN</div>
+                    <div>• CARNE</div>
+                    <div>• KANIKAMA</div>
+                    <div>• HUEVO</div>
+                    <div>• SURIMI</div>
+                </div>
+            </div>
+
+            <!-- Complementos -->
+            <div>
+                <h4 class="text-orange-400 font-semibold mb-4 border-b border-white/20 pb-2">COMPLEMENTOS</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-2 text-sm">
+                    <div>• AGUACATE</div>
+                    <div>• TÁMPICO</div>
+                    <div>• FURIKAKE</div>
+                    <div>• PEPINO</div>
+                    <div>• EDAMAMES</div>
+                    <div>• MANGO <span class="text-xs text-white/50">(SOLO POR TEMPORADA)</span></div>
+                    <div>• QUESO CREMA</div>
+                </div>
+            </div>
+
+            <p class="text-xs text-white/50 text-center mt-8">Arma tu bowl con las proteínas y complementos de tu preferencia.</p>
         </div>
     </div>
 </div>
-
 <script>
     const cards = document.querySelectorAll('.category-card');
     const observer = new IntersectionObserver((entries) => {
